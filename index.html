@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram DM QR Code Generator</title>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/build/qrcode.min.js"></script>
+
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+</head>
+
+<body>
+    <div class="insta-container">
+        <div class="insta-form section" id="insta-form-section">
+            <span>Instagram DM QR Code Generator</span>
+            <h1>Lorem ipsum dolor adipisicing. Instagram DM <span>QR Code </span>Generator</h1>
+            <div class="insta-qr-form">
+                <form id="insta-instagramForm">
+                    <label for="insta-instagramId">Instagram Username:</label>
+                    <input type="text" id="insta-instagramId" name="instagramId" placeholder="Insta Username" required>
+                    <button type="button" class="insta-btns" id="insta-generate-btn" onclick="generateQRCode()">Generate Now</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="insta-first-section insta-section">
+            <div class="insta-first-content">
+                <div class="insta-default">
+                    <h2>Instagram Click to Chat Link for your website</h2>
+                    <p class="insta-pargh">This simple tool makes it easy for contacts to start a chat from your website or landing pages on WhatsApp by using QR codes.</p>
+                    <button class="insta-btns" onclick="scrollToSection('insta-form-section')">Try Now <img src="./assests/images/right-arrow-svgrepo-com.svg" height="15" width="15" alt="" id="insta-bold-svg"></button>
+                </div>
+                <div class="insta-image-section">
+                    <img src="./assests/images/insta.webp" width="450" height="500" alt="Main Image">
+                </div>
+            </div>
+        </div>
+
+        <div class="insta-second-section insta-section">
+            <div class="insta-image-section">
+                <img src="./assests/images/insta.webp" width="450" height="500" alt="Main Image">
+            </div>
+            <div class="insta-default">
+                <h2>Instagram Click to Chat QR Codes for your website</h2>
+                <p class="insta-pargh">This simple tool makes it easy for contacts to start a chat from your website or landing pages on WhatsApp by using QR codes.</p>
+                <button class="insta-btns" onclick="scrollToSection('insta-form-section')">Try Now <img src="./assests/images/right-arrow-svgrepo-com.svg" height="15" width="15" alt="" id="insta-bold-svg"></button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+    <script src="script.js"></script>
+
+    <script>
+        function generateQRCode() {
+            const instagramId = document.getElementById('insta-instagramId').value;
+
+            if (instagramId !== "") {
+                const instagramDMURL = `https://ig.me/m/${encodeURIComponent(instagramId)}`;
+
+                // Create the QR code container and canvas dynamically
+                let qrCodeContainer = document.getElementById('insta-qrcodeContainer');
+                if (!qrCodeContainer) {
+                    qrCodeContainer = document.createElement('div');
+                    qrCodeContainer.id = 'insta-qrcodeContainer';
+                    document.querySelector('.insta-qr-form').appendChild(qrCodeContainer);
+                }
+
+                // Clear any existing content
+                qrCodeContainer.innerHTML = '';
+
+                const canvas = document.createElement('canvas');
+                canvas.id = 'insta-qrcodeCanvas';
+                qrCodeContainer.appendChild(canvas);
+
+                const downloadBtn = document.createElement('button');
+                downloadBtn.id = 'insta-download-btn';
+                downloadBtn.className = 'insta-output-btn';
+                downloadBtn.style.display = 'none';
+                downloadBtn.innerHTML = '<img id="insta-download-svg" src="./assests/images/download.svg" alt="download" width="26" height="26"> Download QR Code';
+                qrCodeContainer.appendChild(downloadBtn);
+
+                // Generate the QR code
+                QRCode.toCanvas(canvas, instagramDMURL, function (error) {
+                    if (error) {
+                        console.error(error);
+                    } else {
+                        console.log('QR code generated!');
+                        // Show the download button
+                        downloadBtn.style.display = 'inline-block';
+                    }
+                });
+
+                // Add event listener for the download button
+                downloadBtn.addEventListener('click', function () {
+                    const dataURL = canvas.toDataURL('image/png');
+                    const link = document.createElement('a');
+                    link.href = dataURL;
+                    link.download = 'instagram_qr_code.png';
+                    link.click();
+                });
+            } else {
+                alert("Please enter Instagram Username");
+            }
+        }
+
+        $(document).ready(function () {
+            $('#insta-instagramForm').on('submit', function (e) {
+                e.preventDefault();
+                generateQRCode();
+            });
+
+            $(document).on('keydown', function (e) {
+                if (e.key === 'Enter' && $('#insta-generate-btn').is(':enabled')) {
+                    e.preventDefault();
+                    generateQRCode();
+                }
+            });
+        });
+
+
+        // scroll function
+        function scrollToSection(sectionId) {
+            document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+
+</html>
